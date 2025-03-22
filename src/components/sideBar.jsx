@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
-
-// Import icons or use a library like 'lucide-react' for icons
 import { Menu, X } from 'lucide-react';
+import icons from '../constants/icons';
+
+const Icon = ({name})=>{
+  return <img src={icons[name]} />
+}
 
 const Sidebar = ({ 
   navigations, 
   userRole, 
-  userInfo, 
+  userInfo={username:"Malkeet", avatar:"", email:"aniketkashyap321@gmail.com"}, 
   logoSrc = '/logo.svg', 
   darkBackground = 'bg-gray-800',
   textColor = 'text-white',
@@ -127,11 +130,11 @@ const Sidebar = ({
                   <img src={userInfo.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-400 text-xl font-bold">
-                    {userInfo.name?.charAt(0) || "U"}
+                    {userInfo.username?.charAt(0) || "U"}
                   </div>
                 )}
               </div>
-              <span className="font-semibold">{userInfo.name}</span>
+              <span className="font-semibold">{userInfo.username}</span>
               <span className="text-sm text-gray-300">{userInfo.email}</span>
             </div>
           )}
@@ -150,7 +153,7 @@ const Sidebar = ({
                       : 'hover:bg-gray-700'
                   }`}
                 >
-                  <span className="mr-3">{getIcon(item.icon)}</span>
+                  <span className="mr-3"><Icon name={item.icon} /></span>
                   <span>{item.name}</span>
                 </button>
               </li>

@@ -1,8 +1,6 @@
-import { message } from "antd";
-import { useEffect, useState } from "react";
-import useStore from "./useStore";
-import { API_URL } from "../utils/constant";
-import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import { API_URL } from "../constants/urls";
+import useAuth from "./useAuth"
 
 /**
  *
@@ -11,23 +9,29 @@ import { observer } from "mobx-react-lite";
  */
 const useGetDelayed = (endpoint) => {
   const [data, setData] = useState([]);
-  const [state, setState] = useState({ isError: null, isSuccess: null, isLoading: false });
-  const store = useStore();
+  const [state, setState] = useState({
+    isError: null,
+    isSuccess: null,
+    isLoading: false,
+  });
+  const {} = useAuth();
 
   const fetchData = async (queryParams = {}) => {
     setState({ isError: null, isLoading: true });
     const queryString = Object.keys(queryParams)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+      .map(
+        (key) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+      )
       .join("&");
     try {
       const res = await fetch(API_URL + endpoint + "?" + queryString, {
         method: "GET",
-        credentials: "include"
+        credentials: "include",
       });
       const json = await res.json();
       if (res.status == 401) {
-        store.auth.error = "Session Expired ! Please login again";
-        store.auth.isAuthenticated = false;
+        //show message and logout
       } else if (res.status == 200) {
         if (Array.isArray(json.data)) {
           if (typeof json.meta === "object" && json.meta !== null) {
@@ -38,7 +42,7 @@ const useGetDelayed = (endpoint) => {
             setData([...json.data]); // Fallback to array state
           }
         } else {
-          setData({...json.data})
+          setData({ ...json.data });
         }
         setState((p) => ({ ...p, isSuccess: json.message }));
       } else {

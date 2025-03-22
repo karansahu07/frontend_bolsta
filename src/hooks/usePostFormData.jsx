@@ -1,21 +1,18 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "../utils/constant";
-import useStore from "./useStore";
-import { message } from "antd";
-import { observer } from "mobx-react-lite";
-
+import { useState } from "react";
+import { API_URL } from "../constants/urls";
+import useAuth from "./useAuth"
 /**
  *
  * @param {string} endpoint
  * @returns {[state:{isError:null|string,isSuccess:null|string,isLoading:boolean}, data:any, post:function]}
  */
 const usePostFormData = (endpoint) => {
-  const store = useStore();
+  const {} = useAuth();
   const [data, setData] = useState([]);
   const [state, setState] = useState({
     isError: null,
     isSuccess: null,
-    isLoading: false
+    isLoading: false,
   });
   /**
    *
@@ -27,18 +24,17 @@ const usePostFormData = (endpoint) => {
     setState({
       isError: null,
       isSuccess: null,
-      isLoading: false
+      isLoading: false,
     });
     try {
       const res = await fetch(API_URL + endpoint, {
         method: "POST",
         credentials: "include",
-        body: formData
+        body: formData,
       });
       const json = await res.json();
       if (res.status == 401) {
-        store.auth.error = "Session Expired ! Please login again";
-        store.auth.isAuthenticated = false;
+        //logout and show message
       } else if (res.status == 201) {
         if (Array.isArray(json.data)) {
           if (typeof json.meta === "object" && json.meta !== null) {
@@ -49,8 +45,8 @@ const usePostFormData = (endpoint) => {
             setData([...json.data]); // Fallback to array state
           }
         } else {
-          setData({...json.data})
-        }        
+          setData({ ...json.data });
+        }
         setState((p) => ({ ...p, isSuccess: json.message }));
       } else {
         setState((p) => ({ ...p, isError: json.message }));

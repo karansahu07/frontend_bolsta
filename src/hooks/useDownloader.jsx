@@ -1,20 +1,19 @@
-import { useState } from "react";
-import useStore from "./useStore";
 import axios from "axios";
-import { API_URL } from "../utils/constant";
-
+import { useState } from "react";
+import { API_URL } from "../constants/urls";
+import useAuth from "./useAuth"
 /**
  *
  * @param {string} endpoint
  * @returns {[state:{isError: String|null, isSuccess: String|null, isLoading: Boolean, progress: number}, download:(queryParams:Object)=>{}]}
  */
 const useDownloader = (endpoint) => {
-  const store = useStore();
+  const {} = useAuth()
   const initState = {
     isError: null,
     isSuccess: null,
     isLoading: false,
-    progress: 0 // Track download progress
+    progress: 0, // Track download progress
   };
   const [state, setState] = useState(initState);
 
@@ -22,7 +21,10 @@ const useDownloader = (endpoint) => {
     setState((p) => ({ ...initState, isLoading: true }));
 
     const queryString = Object.keys(queryParams)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+      .map(
+        (key) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+      )
       .join("&");
 
     try {
@@ -38,8 +40,8 @@ const useDownloader = (endpoint) => {
             const percentage = Math.round((current / total) * 100);
             setState((p) => ({ ...p, progress: percentage }));
           }
-        }
-      })
+        },
+      });
 
       const blob = new Blob([response.data]);
       const contentDisposition = response.headers["content-disposition"];
@@ -48,7 +50,7 @@ const useDownloader = (endpoint) => {
         const match = contentDisposition.match(/filename="?(.+)"?/);
         if (match) {
           filename = match[1];
-          console.log(filename,"filename")
+          console.log(filename, "filename");
         }
       }
 
@@ -64,10 +66,9 @@ const useDownloader = (endpoint) => {
       setState((p) => ({ ...p, isSuccess: true }));
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        store.auth.error = "Session Expired! Please login again";
-        store.auth.isAuthenticated = false;
+        //logout and show some message
       } else {
-        const err = await JSON.parse(await error.response.data.text())
+        const err = await JSON.parse(await error.response.data.text());
         setState((p) => ({ ...p, isError: err.message }));
       }
     } finally {

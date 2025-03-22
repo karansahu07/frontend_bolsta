@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { SERVER_URL } from "../constants/urls";
+import useAuth from "./useAuth"
+import { API_URL } from "../constants/urls";
 
 /**
  *
@@ -15,19 +15,19 @@ const useGet = (endpoint, dependencies = []) => {
     isError: null,
     isSuccess: null
   });
-  const store = useAuth();
+  const {} = useAuth();
   useEffect(() => {
     (async () => {
       setState({ isError: null, isLoading: true });
       try {
-        const res = await fetch(SERVER_URL + endpoint, {
+        const res = await fetch(API_URL + endpoint, {
           credentials: "include"
         });
         const json = await res.json();
         if (res.status == 500) {
           setState((p) => ({ ...p, isError: json.message }));
         } else if (res.status == 401) {
-          store.logout();
+          //logout and show message
         } else {
           if (Array.isArray(json.data)) {
             if (typeof json.meta === "object" && json.meta !== null) {

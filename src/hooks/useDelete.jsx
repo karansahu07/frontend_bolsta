@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "../utils/constant";
-import useStore from "./useStore";
-import { message } from "antd";
-
+import { useState } from "react";
+import { API_URL } from "../constants/urls";
+import useAuth from "./useAuth"
 /**
  *
  * @param {string} endpoint
@@ -13,35 +11,37 @@ const useDelete = (endpoint) => {
   const [state, setState] = useState({
     isError: null,
     isSuccess: null,
-    isLoading: false
+    isLoading: false,
   });
-  const store = useStore();
+  const {} =  useAuth()
 
   const makeDeleteRequest = async (body, queryParams = {}) => {
     setState({
       isSuccess: null,
       isError: null,
-      isLoading: true
+      isLoading: true,
     });
     const queryString = Object.keys(queryParams)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+      .map(
+        (key) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
+      )
       .join("&");
-      const options = {
-        method: "DELETE",
-        headers: {
-          "content-type": "application/json"
-        },
-        credentials: "include"
-      }
-      if(body){
-        options.body = JSON.stringify(body)
-      }
+    const options = {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+      credentials: "include",
+    };
+    if (body) {
+      options.body = JSON.stringify(body);
+    }
     try {
       const res = await fetch(API_URL + endpoint + "?" + queryString, options);
       const json = await res.json();
       if (res.status == 401) {
-        store.auth.error = "Session Expired ! Please login again";
-        store.auth.isAuthenticated = false;
+        // logout and show message if redirected
       } else if (res.status == 200) {
         if (Array.isArray(json.data)) {
           if (typeof json.meta === "object" && json.meta !== null) {
