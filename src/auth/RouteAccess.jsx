@@ -7,7 +7,7 @@ const AccessControl = ({ children: Component }) => {
   const isAccessible = routes.some((pattern) =>
     matchPath(pattern, location.pathname)
   );
-  if (!isAccessible) return <Navigate to="/accessRestricted" />;
+  if (!isAccessible) return <Navigate to="/access-denied" />;
 
   return <>{Component}</>;
 };

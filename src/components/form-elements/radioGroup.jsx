@@ -1,7 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
 
-const RadioGroup = ({ label, name, options }) => {
+const RadioGroup = ({ label, name, options, labelClasses }) => {
   const [field, meta] = useField(name); // Formik hook to handle radio buttons
 
   return (

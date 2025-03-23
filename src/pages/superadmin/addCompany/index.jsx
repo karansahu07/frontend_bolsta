@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../../../components/form-elements/inputField";
 import RadioGroup from "../../../components/form-elements/radioGroup";
+import usePost from "../../../hooks/usePost";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -21,9 +22,27 @@ const validationSchema = Yup.object({
   videosPerSubscriber: Yup.number()
     .min(0, "Videos per subscriber cannot be negative")
     .required("Videos per subscriber is required"),
+  videTime: Yup.number()
+    .min(0, "Videos per subscriber cannot be negative")
+    .required("Videos per subscriber is required"),
 });
 
 const AddCompany = () => {
+  const [addCompanyState, addedCompany, addCompany] = usePost("companies");
+
+  useEffect(() => {
+    if (addCompanyState.isError) {
+      alert(addCompanyState.isError);
+    }
+    if (addCompanyState.isSuccess) {
+      alert("Company added successfully");
+    }
+  }, [addCompanyState.isLoading]);
+
+  const handleSubmit = (values) => {
+    addCompany(values);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <div className="">
@@ -41,15 +60,13 @@ const AddCompany = () => {
                 planCount: 1,
                 subscribers: 0,
                 videosPerSubscriber: 0,
+                videTime: 0,
               }}
               validationSchema={validationSchema}
-              onSubmit={(values) => {
-                console.log("Form submitted:", values);
-                alert("Company Added!");
-              }}
+              onSubmit={handleSubmit}
             >
               {({ handleSubmit }) => (
-                <Form onSubmit={handleSubmit}>
+                <Form>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                       <InputField
@@ -85,26 +102,24 @@ const AddCompany = () => {
 
                     {/* Plan Type */}
                     <div>
-                      <RadioGroup
-                        label="Plan Type Monthly/Annual"
-                        name="planType"
-                        options={[
-                          { label: "Monthly", value: "monthly" },
-                          { label: "Annual", value: "annual" },
-                        ]}
-                      />
+                      <label htmlFor="">Plan Type Monthly/Annual</label>
+                      <div className="flex ">
+                        <RadioGroup
+                          name="planType"
+                          options={[
+                            { label: "Monthly", value: "monthly" },
+                            { label: "Annual", value: "annual" },
+                          ]}
+                        />
+                        <div className="flex-1/2">
+                          <InputField
+                            type="number"
+                            name="planCount"
+                            className="bg-blue-50"
+                          />
+                        </div>
+                      </div>
                     </div>
-
-                    {/* Plan Count */}
-                    <div>
-                      <InputField
-                        label="Plan Count"
-                        type="number"
-                        name="planCount"
-                        className="bg-blue-50"
-                      />
-                    </div>
-
                     {/* Subscribers/Tokens */}
                     <div>
                       <InputField
@@ -124,6 +139,15 @@ const AddCompany = () => {
                         className="bg-blue-50"
                       />
                     </div>
+
+                    <div>
+                      <InputField
+                        label="Video Time (Minutes)"
+                        type="number"
+                        name="videoTime"
+                        className="bg-blue-50"
+                      />
+                    </div>
                   </div>
 
                   {/* Add Company button */}
@@ -136,7 +160,11 @@ const AddCompany = () => {
                     </button>
                   </div>
                   <div className="flex justify-end mt-10">
-                    <button className="bg-blue-500 text-white px-6 py-2 rounded">
+                    <button
+                      onClick={handleSubmit}
+                      type="submit"
+                      className="bg-blue-500 text-white px-6 py-2 rounded"
+                    >
                       SUBMIT +
                     </button>
                   </div>

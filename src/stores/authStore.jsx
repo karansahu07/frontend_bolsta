@@ -15,23 +15,17 @@ axios.defaults.withCredentials = true;
 
 const SECRET_KEY = "your-secret-key";
 
-const dummyUser = {
-  role: "admin",
-  username: "karan",
-  email: "karan@ekarigar.com",
-  homeRoute: "/dashboard",
+const initialUser = {
+  role: "",
+  username: "",
+  email: "",
+  homeRoute: "/login",
   avatar: "",
 };
 
 class AuthStore {
   auth = {
-    user: {
-      email: null,
-      avatar: null,
-      role: null,
-      username: null,
-      homeRoute: "/login",
-    },
+    user: { ...initialUser },
     isInitialized: false,
     isAuthenticated: false,
     isSubmitting: false,
@@ -46,6 +40,7 @@ class AuthStore {
       initialize: action,
       auth: observable,
       getRole: computed,
+      getUser: computed,
     });
 
     this.loadFromLocalStorage();
@@ -99,19 +94,25 @@ class AuthStore {
   }
 
   async initialize() {
-    runInAction(() => (this.auth.isSubmitting = true));
+    runInAction(() => {
+      this.auth.isSubmitting = true;
+      this.auth.isAuthenticated = false;
+    });
 
     try {
       const response = await axios.get("/auth/profile"); // Will fail if backend is down
       const { data } = response.data;
-  
+
       runInAction(() => {
         this.auth.isAuthenticated = true;
-        this.auth.user = { ...data.user }; // Assign user from API response
+        this.auth.user = { ...data }; // Assign user from API response
       });
     } catch (err) {
-      console.warn("Backend is not running. Using dummy user.");
-      return
+      console.log(err);
+      this.auth.isAuthenticated = false;
+      this.auth.user = { ...initialUser };
+      this.auth.error = err.message;
+      this.auth.message = "Session Expired";
     } finally {
       runInAction(() => {
         this.auth.isInitialized = true;
@@ -119,7 +120,6 @@ class AuthStore {
       });
     }
   }
-  
 
   async login(email, password) {
     runInAction(() => (this.auth.isSubmitting = true));
@@ -128,7 +128,7 @@ class AuthStore {
       const { data } = response.data;
       runInAction(() => {
         this.auth.isAuthenticated = true;
-        this.auth.user = data.user;
+        this.auth.user = { ...data };
         this.auth.message = "Logged in successfully";
       });
     } catch (error) {
@@ -166,6 +166,10 @@ class AuthStore {
 
   get getRole() {
     return this.auth.user.role || "guest";
+  }
+
+  get getUser() {
+    return this.auth.user;
   }
 }
 

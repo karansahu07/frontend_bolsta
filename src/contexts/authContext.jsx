@@ -1,5 +1,6 @@
-import { createContext, useMemo } from "react";
+import { createContext, useEffect, useMemo } from "react";
 import AuthStore from "../stores/authStore";
+import { useLocation } from "react-router-dom";
 
 const initialContext = {
   auth: {
@@ -20,12 +21,26 @@ const initialContext = {
   logout: () => {},
   initialize: () => {},
   getRole: () => null,
+  getUser: () => null,
 };
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const authStore = useMemo(() => new AuthStore(), []); // Ensures the store is stable
+
+  const { pathname } = useLocation();
+  const unProtectedRoute = ["/home", "/login", "/"];
+  useEffect(() => {
+    (async () => {
+      await authStore.initialize();
+      if (unProtectedRoute.includes(pathname)) authStore.auth.error = null;
+    })();
+  }, [authStore]);
+
+  if (!authStore.auth.isInitialized) {
+    return <h1>Loading</h1>;
+  }
 
   return (
     <AuthContext.Provider value={authStore}>{children}</AuthContext.Provider>

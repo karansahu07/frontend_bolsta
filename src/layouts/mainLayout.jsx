@@ -6,16 +6,19 @@ import useAuth from "../hooks/useAuth";
 import { observer } from "mobx-react-lite";
 
 function MainLayout() {
-  const {auth, getRole} = useAuth()
+  const store = useAuth();
+  const { getUser, getRole } = store;
+  console.log(getUser);
   return (
     <div className="flex h-screen">
       <Sidebar
+        onLogout={store.logout}
         navigations={navigations}
-        userInfo={auth.user}
+        userInfo={getUser}
         userRole={getRole}
         logoSrc="/bolsta_logo.png"
       />
-      <div className="flex-1 bg-red-500 h-full">
+      <div className="flex-1 h-full md:ml-64">
         <Outlet />
       </div>
     </div>
