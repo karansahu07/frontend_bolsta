@@ -203,18 +203,18 @@ const AllCompanies = () => {
                   )}
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium cursor-pointer" onClick={() => handleSort('status')}>
+              <th className="px-4 py-3 text-left text-sm font-medium cursor-pointer" onClick={() => handleSort('videoPerSubscribers')}>
                 <div className="flex items-center">
                   Video per Subscribers
-                  {sortField === 'status' && (
+                  {sortField === 'videoPerSubscribers' && (
                     <ChevronDown size={16} className={`ml-1 ${sortDirection === 'desc' ? 'transform rotate-180' : ''}`} />
                   )}
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium cursor-pointer" onClick={() => handleSort('pilotExpiryDate')}>
+              <th className="px-4 py-3 text-left text-sm font-medium cursor-pointer" onClick={() => handleSort('planExpiryDate')}>
                 <div className="flex items-center">
                   Plan Type monthly/annual
-                  {sortField === 'pilotExpiryDate' && (
+                  {sortField === 'planExpiryDate' && (
                     <ChevronDown size={16} className={`ml-1 ${sortDirection === 'desc' ? 'transform rotate-180' : ''}`} />
                   )}
                 </div>
@@ -230,7 +230,7 @@ const AllCompanies = () => {
                   <td className="px-4 py-4 text-sm text-gray-700">{company.primaryAdmin}</td>
                   <td className="px-4 py-4 text-sm text-gray-700">{company.adminEmail}</td>
                   <td className="px-4 py-4 text-sm text-gray-700">{company.noOfSubscribers}</td>
-                  <td className="px-4 py-4 text-sm text-gray-700">{company.status}</td>
+                  <td className="px-4 py-4 text-sm text-gray-700">{company.videoPerSubscribers}</td>
                   <td className="px-4 py-4 text-sm text-gray-700">{company.planExpiryDate}</td>
                   <td className="px-4 py-4 text-sm text-gray-700">
                     <div className="flex justify-center space-x-3">
