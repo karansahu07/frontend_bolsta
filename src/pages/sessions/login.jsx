@@ -1,56 +1,65 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "./components/header";
-import useAuth from "../../hooks/useAuth";
+import { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+import Header from './components/header';
+import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  const store = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    store.login(email, password);
+    login({ email, password });
   };
 
+  // useEffect(() => {
+  //   if (auth.isAuthenticated && !auth.isSubmitting) {
+  //     navigate(auth.user?.homeRoute || "/superdashboard");
+  //   }
+  // }, [auth.isAuthenticated, auth.isSubmitting, navigate]);
+
   return (
-    <div className="bg-gradient-to-r from-teal-600 to-blue-900 min-h-screen flex flex-col">
+    <div>
       <Header />
-      <div className="flex-grow flex items-center justify-center py-12">
-        <div className="flex flex-col md:flex-row gap-8 items-center justify-center w-full">
-          <form
-            className="w-full max-w-sm space-y-4"
-            onSubmit={handleLogin}
-          >
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="submit"
-              className="w-full py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition"
-            >
-              Login
-            </button>
-          </form>
-          <div className="hidden md:block">
-            <img
-              className="max-w-xs"
-              src="/main.png"
-              alt="Main Illustration"
-            />
+      <div 
+        className="min-h-screen pt-24 pb-12"
+        style={{
+          background: 'linear-gradient(150deg, rgba(58,109,112,1) 0%, rgba(36,52,69,1) 13%, rgba(36,52,69,1) 88%, rgba(58,109,112,1) 99%)',
+          color: 'white',
+          minHeight: 'calc(100vh - 102px)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-center">
+            <div className="w-full md:w-1/2 flex items-center justify-center">
+              <form className="flex flex-col gap-4 w-full max-w-md" onSubmit={handleLogin}>
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  className="px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required 
+                />
+                <input 
+                  type="password" 
+                  placeholder="Password" 
+                  className="px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required 
+                />
+                <button 
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                >
+                  Login
+                </button>
+              </form>
+            </div>
+            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0">
+              <img className="max-w-full h-auto" src="/main.png" alt="Main Illustration" />
+            </div>
           </div>
         </div>
       </div>

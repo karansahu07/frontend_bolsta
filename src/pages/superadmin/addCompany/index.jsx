@@ -1,8 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import InputField from "../../components/form-elements/inputField";
-import RadioGroup from "../../components/form-elements/radioGroup";
+import InputField from "../../../components/form-elements/inputField";
+import RadioGroup from "../../../components/form-elements/radioGroup";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
