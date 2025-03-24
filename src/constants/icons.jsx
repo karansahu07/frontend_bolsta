@@ -4,5 +4,5 @@ export default {
     dashboard:"/icons/dashboardicon.svg",
     logout:"/icons/logout.svg",
     minus:"/icons/minus.svg",
-    
+    trainings:"/icons/Trainings"
 }

@@ -22,13 +22,13 @@ const validationSchema = Yup.object({
   videosPerSubscriber: Yup.number()
     .min(0, "Videos per subscriber cannot be negative")
     .required("Videos per subscriber is required"),
-  videTime: Yup.number()
+  videoTime: Yup.number()
     .min(0, "Videos per subscriber cannot be negative")
     .required("Videos per subscriber is required"),
 });
 
 const AddCompany = () => {
-  const [addCompanyState, addedCompany, addCompany] = usePost("companies");
+  const [addCompanyState, addedCompany, addCompany] = usePost("su/companies");
 
   useEffect(() => {
     if (addCompanyState.isError) {
@@ -60,7 +60,7 @@ const AddCompany = () => {
                 planCount: 1,
                 subscribers: 0,
                 videosPerSubscriber: 0,
-                videTime: 0,
+                videoTime: 0,
               }}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
@@ -74,7 +74,7 @@ const AddCompany = () => {
                         type="text"
                         name="companyName"
                         placeholder="Enter Your Company Name"
-                        className="bg-blue-50"
+                        className="bg-white-50"
                       />
                     </div>
 
@@ -85,7 +85,7 @@ const AddCompany = () => {
                         type="text"
                         name="adminName"
                         placeholder="Enter Your Primary Admin Name"
-                        className="bg-blue-50"
+                        className="bg-white-50"
                       />
                     </div>
 

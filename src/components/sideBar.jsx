@@ -13,9 +13,9 @@ const Sidebar = ({
   navigations,
   userRole,
   userInfo = {
-    userName: "Malkeet",
+    userName: "Karan",
     avatar: "",
-    email: "aniketkashyap321@gmail.com",
+    email: "karam.ekarigar@gmail.com",
   },
   logoSrc = "/logo.svg",
   darkBackground = "bg-gray-800",
@@ -68,7 +68,7 @@ const Sidebar = ({
     switch (iconName.toLowerCase()) {
       case "bolsta":
         return <div className="w-5 h-5 rounded-full bg-gray-300"></div>;
-      case "training":
+      case "trainings":
         return (
           <div className="w-5 h-5">
             <span className="text-lg">📚</span>
@@ -153,7 +153,7 @@ const Sidebar = ({
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 py-4 overflow-y-auto">
+        <nav className="flex-1 py-4 overflow-y-aut bg-[#364454]">
           <ul>
             {filteredNavigations.map((item, index) => (
               <li key={index}>
@@ -176,7 +176,7 @@ const Sidebar = ({
         </nav>
 
         {/* Logout Button */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-700 bg-[#364454]">
           <button
             onClick={onLogout}
             className="w-full py-2 bg-white text-gray-800 rounded flex items-center justify-center"

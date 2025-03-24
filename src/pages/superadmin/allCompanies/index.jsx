@@ -16,7 +16,7 @@ import useGetDelayed from "../../../hooks/useGetDelayed";
 
 const AllCompanies = () => {
   const [getCompaniesState, companies, fetchCompanies] =
-    useGetDelayed("companies");
+    useGetDelayed("su/companies");
   // Sample data
   const [data, setData] = useState([
     {
